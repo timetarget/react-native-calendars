@@ -69,13 +69,14 @@ class Day extends Component {
         marking: true
       };
     }
-    let dot;
+
     if (marking.marked) {
       dotStyle.push(this.style.visibleDot);
       if (marking.dotColor) {
         dotStyle.push({backgroundColor: marking.dotColor});
       }
-      dot = (<View style={dotStyle}/>);
+    } else {
+      dotStyle.push({ backgroundColor: 'transparent' })
     }
 
     if (marking.selected) {
@@ -89,6 +90,7 @@ class Day extends Component {
     } else if (this.props.state === 'today') {
       textStyle.push(this.style.todayText);
     }
+
     return (
       <TouchableOpacity
         style={containerStyle}
@@ -100,7 +102,7 @@ class Day extends Component {
         }
       >
         <Text allowFontScaling={false} style={textStyle}>{String(this.props.children)}</Text>
-        {dot}
+        <View style={dotStyle} />
       </TouchableOpacity>
     );
   }
