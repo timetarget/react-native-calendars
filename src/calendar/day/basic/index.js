@@ -62,6 +62,7 @@ class Day extends Component {
     const containerStyle = [this.style.base];
     const textStyle = [this.style.text];
     const dotStyle = [this.style.dot];
+    const dotBorderStyle = [this.style.dotBorder];
 
     let marking = this.props.marking || {};
     if (marking && marking.constructor === Array && marking.length) {
@@ -75,6 +76,11 @@ class Day extends Component {
       if (marking.dotColor) {
         dotStyle.push({backgroundColor: marking.dotColor});
       }
+      if (marking.dotBorderColor) {
+        dotBorderStyle.push({
+          backgroundColor: marking.dotBorderColor
+        })
+      }
     } else {
       dotStyle.push({ backgroundColor: 'transparent' })
     }
@@ -85,6 +91,9 @@ class Day extends Component {
       textStyle.push(this.style.selectedText);
     } else if (marking.dateColor && this.props.state !== 'today') {
       textStyle.push({color: marking.dateColor});
+      if (marking.fontWeight) {
+        textStyle.push({fontWeight: marking.fontWeight});
+      }
     } else if (typeof marking.disabled !== 'undefined' ? marking.disabled : this.props.state === 'disabled') {
       textStyle.push(this.style.disabledText);
     } else if (this.props.state === 'today') {
@@ -102,7 +111,9 @@ class Day extends Component {
         }
       >
         <Text allowFontScaling={false} style={textStyle}>{String(this.props.children)}</Text>
-        <View style={dotStyle} />
+        <View style={dotBorderStyle}>
+          <View style={dotStyle} />
+        </View>
       </TouchableOpacity>
     );
   }
