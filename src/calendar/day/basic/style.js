@@ -56,9 +56,9 @@ export default function styleConstructor(theme={}) {
       opacity: 1,
       backgroundColor: 'transparent'
     },
-    selectedDot: {
-      backgroundColor: appStyle.selectedDotColor
-    },
+    // selectedDot: {
+    //   backgroundColor: appStyle.selectedDotColor
+    // },
     ...(theme[STYLESHEET_ID] || {})
   });
 }

@@ -50,10 +50,8 @@ class Day extends Component {
       } else {
         markingChanged = true;
       }
-      // console.log('marking changed', markingChanged);
       return markingChanged;
     } else {
-      // console.log('changed', changed);
       return !!changed;
     }
   }
@@ -73,13 +71,13 @@ class Day extends Component {
 
     if (marking.marked) {
       dotStyle.push(this.style.visibleDot);
-      if (marking.dotColor) {
-        dotStyle.push({backgroundColor: marking.dotColor});
-      }
-      if (marking.dotBorderColor) {
-        dotBorderStyle.push({
-          backgroundColor: marking.dotBorderColor
-        })
+
+      if (marking.selected) {
+        marking.dotColorSelected && dotStyle.push({ backgroundColor: marking.dotColorSelected });
+        marking.dotBorderColorSelected && dotBorderStyle.push({ backgroundColor: marking.dotBorderColorSelected })
+      } else {
+        marking.dotColor && dotStyle.push({ backgroundColor: marking.dotColor });
+        marking.dotBorderColor && dotBorderStyle.push({ backgroundColor: marking.dotBorderColor })
       }
     } else {
       dotStyle.push({ backgroundColor: 'transparent' })
@@ -87,7 +85,9 @@ class Day extends Component {
 
     if (marking.selected) {
       containerStyle.push(this.style.selected);
-      dotStyle.push(this.style.selectedDot);
+
+      // We don't want it to work this way.
+      // dotStyle.push(this.style.selectedDot);
       textStyle.push(this.style.selectedText);
     } else if (marking.dateColor && this.props.state !== 'today') {
       textStyle.push({color: marking.dateColor});
