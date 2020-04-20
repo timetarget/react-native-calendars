@@ -91,7 +91,9 @@ export default class AgendaView extends Component {
     /** Called when the momentum scroll starts for the agenda list. **/
     onMomentumScrollBegin: PropTypes.func,
     /** Called when the momentum scroll stops for the agenda list. **/
-    onMomentumScrollEnd: PropTypes.func
+    onMomentumScrollEnd: PropTypes.func,
+    /** If provided, default view on first render will be Calendar instead of Agenda */
+    isDefaultViewCalendar: PropTypes.bool
   };
 
   constructor(props) {
@@ -107,8 +109,8 @@ export default class AgendaView extends Component {
 
     this.state = {
       scrollY: new Animated.Value(0),
-      calendarIsReady: false,
-      calendarScrollable: false,
+      calendarIsReady: Boolean(this.props.isDefaultViewCalendar),
+      calendarScrollable: Boolean(this.props.isDefaultViewCalendar),
       firstResevationLoad: false,
       selectedDay: parseDate(this.props.selected) || XDate(true),
       topDay: parseDate(this.props.selected) || XDate(true)
@@ -142,7 +144,7 @@ export default class AgendaView extends Component {
     // When user touches knob, the actual component that receives touch events is a ScrollView.
     // It needs to be scrolled to the bottom, so that when user moves finger downwards,
     // scroll position actually changes (it would stay at 0, when scrolled to the top).
-    this.setScrollPadPosition(this.initialScrollPadPosition(), false);
+    this.setScrollPadPosition(this.props.isDefaultViewCalendar ? 0 : this.initialScrollPadPosition(), false);
     // delay rendering calendar in full height because otherwise it still flickers sometimes
     setTimeout(() => this.setState({calendarIsReady: true}), 0);
   }
@@ -150,6 +152,14 @@ export default class AgendaView extends Component {
   onLayout(event) {
     this.viewHeight = event.nativeEvent.layout.height;
     this.viewWidth = event.nativeEvent.layout.width;
+
+    // Not sure if this is needed anymore
+    if (this.props.isDefaultViewCalendar) {
+      this.calendar.scrollToDay(this.state.selectedDay.clone().setDate(1), 0, false);
+    } else {
+      this.calendar.scrollToDay(this.state.selectedDay.clone(), this.calendarOffset(), false);
+    }
+
     this.forceUpdate();
   }
 

@@ -9,6 +9,7 @@ export default function styleConstructor(theme={}) {
     base: {
       width: 32,
       height: 32,
+      justifyContent: 'center',
       alignItems: 'center'
     },
     text: {
@@ -32,7 +33,8 @@ export default function styleConstructor(theme={}) {
       borderRadius: 16
     },
     todayText: {
-      color: appStyle.todayTextColor
+      color: appStyle.todayTextColor,
+      fontWeight: appStyle.todayFontWeight
     },
     selectedText: {
       color: appStyle.selectedDayTextColor
@@ -40,21 +42,29 @@ export default function styleConstructor(theme={}) {
     disabledText: {
       color: appStyle.textDisabledColor
     },
+    dotBorder: {
+      top: -2,
+      width: 6,
+      height: 6,
+      borderRadius: 3,
+      backgroundColor: 'transparent'
+    },
     dot: {
+      top: 1,
+      left: 1,
       width: 4,
       height: 4,
-      marginTop: 1,
       borderRadius: 2,
       opacity: 0,
       ...appStyle.dotStyle
     },
     visibleDot: {
       opacity: 1,
-      backgroundColor: appStyle.dotColor
+      backgroundColor: 'transparent'
     },
-    selectedDot: {
-      backgroundColor: appStyle.selectedDotColor
-    },
+    // selectedDot: {
+    //   backgroundColor: appStyle.selectedDotColor
+    // },
     disabledDot: {
       backgroundColor: appStyle.disabledDotColor || appStyle.dotColor
     },

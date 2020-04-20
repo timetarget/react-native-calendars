@@ -44,6 +44,7 @@ class Day extends Component {
     const containerStyle = [this.style.base];
     const textStyle = [this.style.text];
     const dotStyle = [this.style.dot];
+    const dotBorderStyle = [this.style.dotBorder];
     
     let marking = this.props.marking || {};
     if (marking && marking.constructor === Array && marking.length) {
@@ -53,17 +54,21 @@ class Day extends Component {
     }
     
     const isDisabled = typeof marking.disabled !== 'undefined' ? marking.disabled : this.props.state === 'disabled';
-    
-    let dot;
+
     if (marking.marked) {
       dotStyle.push(this.style.visibleDot);
       if (isDisabled) {
         dotStyle.push(this.style.disabledDot);
       }
-      if (marking.dotColor) {
-        dotStyle.push({backgroundColor: marking.dotColor});
+      if (marking.selected) {
+        marking.dotColorSelected && dotStyle.push({ backgroundColor: marking.dotColorSelected });
+        marking.dotBorderColorSelected && dotBorderStyle.push({ backgroundColor: marking.dotBorderColorSelected })
+      } else {
+        marking.dotColor && dotStyle.push({backgroundColor: marking.dotColor});
+        marking.dotBorderColor && dotBorderStyle.push({backgroundColor: marking.dotBorderColor})
       }
-      dot = (<View style={dotStyle}/>);
+    } else {
+      dotStyle.push({backgroundColor: 'transparent'});
     }
 
     if (marking.selected) {
@@ -71,8 +76,15 @@ class Day extends Component {
       if (marking.selectedColor) {
         containerStyle.push({backgroundColor: marking.selectedColor});
       }
-      dotStyle.push(this.style.selectedDot);
+
+      // We don't want it to work this way.
+      // dotStyle.push(this.style.selectedDot);
       textStyle.push(this.style.selectedText);
+    } else if (marking.dateColor && this.props.state !== 'today') {
+      textStyle.push({color: marking.dateColor});
+      if (marking.fontWeight) {
+        textStyle.push({fontWeight: marking.fontWeight});
+      }
     } else if (isDisabled) {
       textStyle.push(this.style.disabledText);
     } else if (this.props.state === 'today') {
@@ -93,7 +105,9 @@ class Day extends Component {
         accessibilityLabel={this.props.accessibilityLabel}
       >
         <Text allowFontScaling={false} style={textStyle}>{String(this.props.children)}</Text>
-        {dot}
+        <View style={dotBorderStyle}>
+          <View style={dotStyle} />
+        </View>
       </TouchableOpacity>
     );
   }
